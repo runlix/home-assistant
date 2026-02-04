@@ -12,7 +12,7 @@ ARG BASE_DIGEST=""
 # Home Assistant source tarball URL from GitHub releases
 ARG PACKAGE_URL=""
 
-# STAGE 1 — download and build Home Assistant from source
+# STAGE 1 — build Python 3.13 and Home Assistant from source
 FROM ${BUILDER_IMAGE}:${BUILDER_TAG}@${BUILDER_DIGEST} AS builder
 
 # Redeclare ARG in this stage so it's available for use in RUN commands
@@ -20,39 +20,63 @@ ARG PACKAGE_URL
 
 WORKDIR /app
 
-# Use BuildKit cache mounts to persist apt and pip cache between builds
+# Build Python 3.13 from source and install Home Assistant
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     --mount=type=cache,target=/root/.cache/pip,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
-    python3 \
-    python3-pip \
-    python3-venv \
     gcc \
     g++ \
-    python3-dev \
+    make \
     libffi-dev \
     libssl-dev \
- && rm -rf /var/lib/apt/lists/* \
- && python3 -m venv /app/venv \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    xz-utils \
+    tk-dev \
+    libxml2-dev \
+    libxmlsec1-dev \
+    liblzma-dev \
+    zlib1g-dev \
+ && curl -O https://www.python.org/ftp/python/3.13.2/Python-3.13.2.tar.xz \
+ && tar -xf Python-3.13.2.tar.xz \
+ && cd Python-3.13.2 \
+ && ./configure --enable-optimizations --prefix=/usr/local \
+ && make -j$(nproc) \
+ && make install \
+ && cd /app \
+ && rm -rf Python-3.13.2 Python-3.13.2.tar.xz \
+ && /usr/local/bin/python3.13 -m venv /app/venv \
  && /app/venv/bin/pip install --upgrade pip setuptools wheel \
  && curl -L -f "${PACKAGE_URL}" -o homeassistant-source.tar.gz \
  && tar -xzf homeassistant-source.tar.gz \
  && /app/venv/bin/pip install ./core-* \
  && rm -rf homeassistant-source.tar.gz core-*
 
-# STAGE 2 — install Home Assistant runtime dependencies
+# STAGE 2 — install runtime dependencies (shared libs for Python 3.13)
 FROM ${BUILDER_IMAGE}:${BUILDER_TAG}@${BUILDER_DIGEST} AS ha-deps
 
 # Use BuildKit cache mounts to persist apt cache between builds
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
     libffi8 \
     libssl3 \
+    libbz2-1.0 \
+    libreadline8 \
+    libsqlite3-0 \
+    libncurses6 \
+    libncursesw6 \
+    libtk8.6 \
+    libxml2 \
+    libxmlsec1 \
+    liblzma5 \
+    zlib1g \
     libc6 \
  && rm -rf /var/lib/apt/lists/*
 
@@ -65,15 +89,31 @@ ARG LIB_DIR=aarch64-linux-gnu
 # Copy Python virtual environment from builder
 COPY --from=builder /app/venv /app/venv
 
-# Copy Python runtime and dependencies
-COPY --from=ha-deps /usr/bin/python3.11 /usr/bin/python3.11
-COPY --from=ha-deps /usr/bin/python3 /usr/bin/python3
+# Copy Python 3.13 binaries from builder
+COPY --from=builder /usr/local/bin/python3.13 /usr/bin/python3.13
+COPY --from=builder /usr/local/bin/python3 /usr/bin/python3
 
-# Copy shared libraries
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libpython3.11.so.* /usr/lib/${LIB_DIR}/
+# Copy Python 3.13 standard library
+COPY --from=builder /usr/local/lib/python3.13 /usr/local/lib/python3.13
+
+# Copy Python 3.13 shared library
+COPY --from=builder /usr/local/lib/libpython3.13.so.1.0 /usr/local/lib/
+
+# Copy runtime dependencies for Python
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libffi.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libssl.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libcrypto.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libbz2.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libreadline.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libsqlite3.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libncurses.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libncursesw.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libtk8.6.so /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libxml2.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libxmlsec1.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/liblzma.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libz.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /lib/${LIB_DIR}/libtinfo.so.* /lib/${LIB_DIR}/
 
 # Create config directory
 RUN mkdir -p /config && chown 65532:65532 /config
