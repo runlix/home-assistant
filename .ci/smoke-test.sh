@@ -127,6 +127,7 @@ echo -e "${GREEN}✅ No critical errors in logs${NC}"
 echo ""
 
 # Test API endpoint with retries
+# Home Assistant requires authentication, so we check for HTTP 401 (Unauthorized) as success
 echo -e "${BLUE}🏥 Testing API endpoint...${NC}"
 API_URL="http://localhost:${HA_PORT}/api/"
 MAX_ATTEMPTS=30
@@ -136,18 +137,24 @@ API_OK=false
 while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
   ATTEMPT=$((ATTEMPT + 1))
 
-  if curl -fsSL --max-time 5 "${API_URL}" -o /dev/null 2>/dev/null; then
+  # Check HTTP status code - 200 (with auth) or 401 (without auth) both mean API is working
+  HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "${API_URL}" 2>/dev/null || echo "000")
+
+  if [ "${HTTP_CODE}" = "200" ] || [ "${HTTP_CODE}" = "401" ]; then
     API_OK=true
+    if [ "${HTTP_CODE}" = "401" ]; then
+      echo -e "${GREEN}✅ API endpoint responding (requires authentication, as expected)${NC}"
+    else
+      echo -e "${GREEN}✅ API endpoint responding (HTTP ${HTTP_CODE})${NC}"
+    fi
     break
   fi
 
-  echo "Attempt ${ATTEMPT}/${MAX_ATTEMPTS}: Waiting for API endpoint..."
+  echo "Attempt ${ATTEMPT}/${MAX_ATTEMPTS}: Waiting for API endpoint... (HTTP ${HTTP_CODE})"
   sleep 5
 done
 
-if [ "${API_OK}" = true ]; then
-  echo -e "${GREEN}✅ API endpoint responding (${API_URL})${NC}"
-else
+if [ "${API_OK}" = false ]; then
   echo -e "${RED}❌ API endpoint check failed after ${MAX_ATTEMPTS} attempts${NC}"
   echo ""
   echo "Recent container logs:"
@@ -191,7 +198,7 @@ echo ""
 echo "Test Summary:"
 echo "  • Container started successfully"
 echo "  • No critical errors in logs"
-echo "  • API endpoint responding"
+echo "  • API endpoint responding (authentication required)"
 echo "  • Web UI accessible"
 echo "  • Correct architecture: ${IMAGE_ARCH}"
 echo ""
