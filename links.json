@@ -1,0 +1,12 @@
+{
+  "links": [
+    {
+      "name": "Upstream Project",
+      "url": "https://github.com/home-assistant/core"
+    },
+    {
+      "name": "Home Assistant Documentation",
+      "url": "https://www.home-assistant.io/docs/"
+    }
+  ]
+}

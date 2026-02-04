@@ -1,0 +1,104 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Renovate configuration for docker-matrix.json updates",
+  "extends": [
+    "config:recommended"
+  ],
+  "baseBranches": ["release"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update Debian builder images (BUILDER_TAG + BUILDER_DIGEST)",
+      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
+      "matchStrings": [
+        "\"BUILDER_TAG\"\\s*:\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]*?\"BUILDER_DIGEST\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
+      ],
+      "depNameTemplate": "docker.io/library/debian",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Distroless runtime base images (BASE_TAG + BASE_DIGEST)",
+      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
+      "matchStrings": [
+        "\"BASE_TAG\"\\s*:\\s*\"(?<currentValue>[^\"]+)\"[\\s\\S]*?\"BASE_DIGEST\"\\s*:\\s*\"(?<currentDigest>sha256:[a-f0-9]{64})\""
+      ],
+      "depNameTemplate": "ghcr.io/runlix/distroless-runtime",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Home Assistant version from GitHub releases",
+      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
+      "matchStrings": [
+        "\"version\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "depNameTemplate": "home-assistant/core",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v?(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Home Assistant package URLs from GitHub releases",
+      "fileMatch": ["^\\.ci/docker-matrix\\.json$"],
+      "matchStrings": [
+        "\"PACKAGE_URL\"\\s*:\\s*\"https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>[^/]+)/[^\"]+\""
+      ],
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v?(?<version>.*)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group all docker-matrix.json updates into daily PRs",
+      "matchFileNames": ["**/.ci/docker-matrix.json"],
+      "groupName": "Docker base images",
+      "schedule": ["before 3am"]
+    },
+    {
+      "description": "Separate Debian builder updates",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["docker.io/library/debian"],
+      "groupName": "Debian builder",
+      "commitMessageTopic": "Debian builder image"
+    },
+    {
+      "description": "Separate Distroless runtime base updates",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/runlix/distroless-runtime"],
+      "groupName": "Distroless runtime",
+      "commitMessageTopic": "Distroless runtime base image"
+    },
+    {
+      "description": "Use semver versioning for Home Assistant (YYYY.M.P format)",
+      "matchDatasources": ["github-releases"],
+      "matchPackageNames": ["home-assistant/core"],
+      "versioning": "semver"
+    },
+    {
+      "description": "Group Home Assistant version and package URL updates with auto-merge",
+      "matchDatasources": ["github-releases"],
+      "matchPackageNames": ["home-assistant/core"],
+      "groupName": "Home Assistant release",
+      "commitMessageTopic": "Home Assistant version",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Auto-merge digest-only updates (security patches)",
+      "matchFileNames": ["**/.ci/docker-matrix.json"],
+      "matchUpdateTypes": ["digest"],
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    }
+  ],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "🔄 Dependency Updates Dashboard",
+  "dependencyDashboardApproval": false,
+  "labels": ["dependencies", "docker"],
+  "timezone": "UTC",
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 1
+}
