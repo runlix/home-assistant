@@ -1,0 +1,90 @@
+{
+  "$schema": "../../build-workflow/schema/docker-matrix-schema.json",
+  "version": "2025.1.6",
+  "variants": [
+    {
+      "name": "latest-amd64",
+      "enabled": true,
+      "platforms": [
+        "linux/amd64"
+      ],
+      "dockerfiles": {
+        "linux/amd64": "linux-amd64.Dockerfile"
+      },
+      "tag_suffix": "stable",
+      "build_args": {
+        "BUILDER_IMAGE": "docker.io/library/debian",
+        "BUILDER_TAG": "bookworm-slim",
+        "BUILDER_DIGEST": "sha256:6458e6ce2b6448e31bfdced4be7d8aa88d389e6694ab09f5a718a694abe147f4",
+        "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
+        "BASE_TAG": "stable",
+        "BASE_DIGEST": "sha256:d0b92305a0095e40a6d8f346ab37f4289d2236dd4334cd13a099243408899a1b",
+        "PACKAGE_URL": "https://github.com/home-assistant/core/releases/download/2025.1.6/homeassistant-2025.1.6-py3-none-any.whl"
+      },
+      "test_script": ".ci/smoke-test.sh"
+    },
+    {
+      "name": "latest-arm64",
+      "enabled": true,
+      "platforms": [
+        "linux/arm64"
+      ],
+      "dockerfiles": {
+        "linux/arm64": "linux-arm64.Dockerfile"
+      },
+      "tag_suffix": "stable",
+      "build_args": {
+        "BUILDER_IMAGE": "docker.io/library/debian",
+        "BUILDER_TAG": "bookworm-slim",
+        "BUILDER_DIGEST": "sha256:1c5d4fd0caad88eb6cb62bcdbc2f580ef2523ab69e86abc2bd2a94703aac9f96",
+        "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
+        "BASE_TAG": "stable",
+        "BASE_DIGEST": "sha256:679f4bfb7d05609c3aeff212e2c013de415eeb4dcbf437617a43fc2441667be1",
+        "PACKAGE_URL": "https://github.com/home-assistant/core/releases/download/2025.1.6/homeassistant-2025.1.6-py3-none-any.whl"
+      },
+      "test_script": ".ci/smoke-test.sh"
+    },
+    {
+      "name": "debug-amd64",
+      "enabled": true,
+      "platforms": [
+        "linux/amd64"
+      ],
+      "dockerfiles": {
+        "linux/amd64": "linux-amd64.Dockerfile"
+      },
+      "tag_suffix": "debug",
+      "build_args": {
+        "BUILDER_IMAGE": "docker.io/library/debian",
+        "BUILDER_TAG": "bookworm-slim",
+        "BUILDER_DIGEST": "sha256:6458e6ce2b6448e31bfdced4be7d8aa88d389e6694ab09f5a718a694abe147f4",
+        "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
+        "BASE_TAG": "debug",
+        "BASE_DIGEST": "sha256:6eb28943a0966722aaee2dc4e6b7eaa6d2b1002650d9088a1045ea18022be8fd",
+        "PACKAGE_URL": "https://github.com/home-assistant/core/releases/download/2025.1.6/homeassistant-2025.1.6-py3-none-any.whl"
+      },
+      "test_script": ".ci/smoke-test.sh"
+    },
+    {
+      "name": "debug-arm64",
+      "enabled": true,
+      "platforms": [
+        "linux/arm64"
+      ],
+      "dockerfiles": {
+        "linux/arm64": "linux-arm64.Dockerfile"
+      },
+      "tag_suffix": "debug",
+      "build_args": {
+        "BUILDER_IMAGE": "docker.io/library/debian",
+        "BUILDER_TAG": "bookworm-slim",
+        "BUILDER_DIGEST": "sha256:1c5d4fd0caad88eb6cb62bcdbc2f580ef2523ab69e86abc2bd2a94703aac9f96",
+        "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
+        "BASE_TAG": "debug",
+        "BASE_DIGEST": "sha256:a97b57fbea3cdb2c175c292ca9da431c6d34858af99acb476b04f223ebd0e6cc",
+        "PACKAGE_URL": "https://github.com/home-assistant/core/releases/download/2025.1.6/homeassistant-2025.1.6-py3-none-any.whl"
+      },
+      "test_script": ".ci/smoke-test.sh"
+    }
+  ]
+}
