@@ -116,9 +116,6 @@ COPY --from=ha-deps /usr/lib/${LIB_DIR}/liblzma.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libz.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /lib/${LIB_DIR}/libtinfo.so.* /lib/${LIB_DIR}/
 
-# Create config directory
-RUN mkdir -p /config && chown 65532:65532 /config
-
 WORKDIR /config
 USER 65532:65532
 
