@@ -46,9 +46,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
  && curl -O https://www.python.org/ftp/python/3.13.2/Python-3.13.2.tar.xz \
  && tar -xf Python-3.13.2.tar.xz \
  && cd Python-3.13.2 \
- && ./configure --enable-optimizations --prefix=/usr/local \
+ && ./configure --enable-optimizations --enable-shared --prefix=/usr/local \
  && make -j$(nproc) \
  && make install \
+ && ldconfig \
  && cd /app \
  && rm -rf Python-3.13.2 Python-3.13.2.tar.xz \
  && /usr/local/bin/python3.13 -m venv /app/venv \
@@ -96,8 +97,8 @@ COPY --from=builder /usr/local/bin/python3 /usr/bin/python3
 # Copy Python 3.13 standard library
 COPY --from=builder /usr/local/lib/python3.13 /usr/local/lib/python3.13
 
-# Copy Python 3.13 shared library
-COPY --from=builder /usr/local/lib/libpython3.13.so.1.0 /usr/local/lib/
+# Copy Python 3.13 shared library and symlinks
+COPY --from=builder /usr/local/lib/libpython3.13.so* /usr/local/lib/
 
 # Copy runtime dependencies for Python
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libffi.so.* /usr/lib/${LIB_DIR}/
@@ -124,5 +125,6 @@ USER 65532:65532
 # Set environment variables
 ENV PATH="/app/venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 
 ENTRYPOINT ["/app/venv/bin/hass", "--config", "/config"]
