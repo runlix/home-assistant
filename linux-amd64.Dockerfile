@@ -93,9 +93,9 @@ ARG LIB_DIR=x86_64-linux-gnu
 # Copy Python virtual environment from builder
 COPY --from=builder /app/venv /app/venv
 
-# Copy Python 3.13 binaries from builder
-COPY --from=builder /usr/local/bin/python3.13 /usr/bin/python3.13
-COPY --from=builder /usr/local/bin/python3 /usr/bin/python3
+# Copy Python 3.13 binaries from builder (must match venv creation path)
+COPY --from=builder /usr/local/bin/python3.13 /usr/local/bin/python3.13
+COPY --from=builder /usr/local/bin/python3 /usr/local/bin/python3
 
 # Copy Python 3.13 standard library
 COPY --from=builder /usr/local/lib/python3.13 /usr/local/lib/python3.13
@@ -123,7 +123,7 @@ WORKDIR /config
 USER 65532:65532
 
 # Set environment variables
-ENV PATH="/app/venv/bin:$PATH"
+ENV PATH="/app/venv/bin:/usr/local/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 
