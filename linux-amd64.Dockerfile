@@ -56,7 +56,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
  && /app/venv/bin/pip install --upgrade pip setuptools wheel \
  && curl -L -f "${PACKAGE_URL}" -o homeassistant-source.tar.gz \
  && tar -xzf homeassistant-source.tar.gz \
- && /app/venv/bin/pip install ./core-* \
+ && cd core-* \
+ && /app/venv/bin/pip install --no-cache-dir . \
+ && cd /app \
+ && test -f /app/venv/bin/hass || (echo "ERROR: hass binary not found after installation" && exit 1) \
  && rm -rf homeassistant-source.tar.gz core-*
 
 # STAGE 2 — install runtime dependencies (shared libs for Python 3.13)
