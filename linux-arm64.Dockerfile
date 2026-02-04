@@ -9,10 +9,10 @@ ARG BASE_TAG=stable
 # If empty, FROM will fail (which is desired to enforce digest pinning)
 ARG BUILDER_DIGEST=""
 ARG BASE_DIGEST=""
-# Package URL from VERSION.json packages[0].url
+# Home Assistant source tarball URL from GitHub releases
 ARG PACKAGE_URL=""
 
-# STAGE 1 — fetch Home Assistant wheel and install Python dependencies
+# STAGE 1 — download and build Home Assistant from source
 FROM ${BUILDER_IMAGE}:${BUILDER_TAG}@${BUILDER_DIGEST} AS builder
 
 # Redeclare ARG in this stage so it's available for use in RUN commands
@@ -38,9 +38,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
  && rm -rf /var/lib/apt/lists/* \
  && python3 -m venv /app/venv \
  && /app/venv/bin/pip install --upgrade pip setuptools wheel \
- && curl -L -f "${PACKAGE_URL}" -o homeassistant.whl \
- && /app/venv/bin/pip install ./homeassistant.whl \
- && rm homeassistant.whl
+ && curl -L -f "${PACKAGE_URL}" -o homeassistant-source.tar.gz \
+ && tar -xzf homeassistant-source.tar.gz \
+ && /app/venv/bin/pip install ./core-* \
+ && rm -rf homeassistant-source.tar.gz core-*
 
 # STAGE 2 — install Home Assistant runtime dependencies
 FROM ${BUILDER_IMAGE}:${BUILDER_TAG}@${BUILDER_DIGEST} AS ha-deps
