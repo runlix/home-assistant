@@ -11,6 +11,8 @@ ARG BUILDER_DIGEST=""
 ARG BASE_DIGEST=""
 # Home Assistant source tarball URL from GitHub releases
 ARG PACKAGE_URL=""
+# go2rtc version expected by Home Assistant integration
+ARG GO2RTC_VERSION="1.9.14"
 
 # STAGE 1 — build Python 3.13 and Home Assistant from source
 FROM ${BUILDER_IMAGE}:${BUILDER_TAG}@${BUILDER_DIGEST} AS builder
@@ -66,12 +68,16 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # STAGE 2 — install runtime dependencies (shared libs for Python 3.13)
 FROM ${BUILDER_IMAGE}:${BUILDER_TAG}@${BUILDER_DIGEST} AS ha-deps
 
+ARG GO2RTC_VERSION
+
 # Use BuildKit cache mounts to persist apt cache between builds
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     binutils \
     build-essential \
+    curl \
     ffmpeg \
     gcc \
     g++ \
@@ -86,7 +92,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libstdc++6 \
     libturbojpeg0 \
     libbz2-1.0 \
+    libpcap-dev \
     libreadline8 \
+    libpcap0.8 \
     libsqlite3-0 \
     libncurses6 \
     libncursesw6 \
@@ -96,6 +104,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     liblzma5 \
     zlib1g \
     libc6 \
+ && curl -L -f "https://github.com/AlexxIT/go2rtc/releases/download/v${GO2RTC_VERSION}/go2rtc_linux_amd64" -o /usr/bin/go2rtc \
+ && chmod +x /usr/bin/go2rtc \
  && rm -rf /var/lib/apt/lists/*
 
 # STAGE 3 — distroless final image
@@ -122,11 +132,13 @@ COPY --from=builder /usr/local/lib/libpython3.13.so.1.0 /usr/local/lib/libpython
 # Copy runtime dependencies for Python
 COPY --from=ha-deps /usr/bin/ffmpeg /usr/bin/ffmpeg
 COPY --from=ha-deps /usr/bin/ffprobe /usr/bin/ffprobe
+COPY --from=ha-deps /usr/bin/go2rtc /usr/bin/go2rtc
 COPY --from=ha-deps /usr/bin/c++ /usr/bin/c++
 COPY --from=ha-deps /usr/bin/as /usr/bin/as
 COPY --from=ha-deps /usr/bin/gcc /usr/bin/gcc
 COPY --from=ha-deps /usr/bin/g++ /usr/bin/g++
 COPY --from=ha-deps /usr/bin/ld /usr/bin/ld
+COPY --from=ha-deps /usr/bin/objdump /usr/bin/objdump
 COPY --from=ha-deps /usr/bin/x86_64-linux-gnu-as /usr/bin/x86_64-linux-gnu-as
 COPY --from=ha-deps /usr/bin/x86_64-linux-gnu-gcc* /usr/bin/
 COPY --from=ha-deps /usr/bin/x86_64-linux-gnu-g++* /usr/bin/
