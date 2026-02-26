@@ -109,6 +109,14 @@ if [ "${FATAL_COUNT}" -gt 0 ]; then
   exit 1
 fi
 
+# Fail fast if logs report missing packages/dependencies at runtime.
+PKG_FAIL_COUNT=$(echo "$LOGS" | grep -ciE "Unable to install package|Requirements .* not found|Could not find .* binary|Unable to locate .* library|error: command '.*' failed: No such file or directory" || true)
+if [ "${PKG_FAIL_COUNT}" -gt 0 ]; then
+  echo -e "${RED}❌ Found ${PKG_FAIL_COUNT} package/runtime requirement error(s) in logs:${NC}"
+  echo "$LOGS" | grep -iE "Unable to install package|Requirements .* not found|Could not find .* binary|Unable to locate .* library|error: command '.*' failed: No such file or directory" | head -10
+  exit 1
+fi
+
 # Check for expected startup messages
 if grep -qi "home assistant" <<< "$LOGS" 2>/dev/null; then
   echo -e "${GREEN}✅ Home Assistant startup message found${NC}"
