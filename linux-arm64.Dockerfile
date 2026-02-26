@@ -70,8 +70,12 @@ FROM ${BUILDER_IMAGE}:${BUILDER_TAG}@${BUILDER_DIGEST} AS ha-deps
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    gcc \
     libffi8 \
+    libgcc-s1 \
     libssl3 \
+    libstdc++6 \
     libbz2-1.0 \
     libreadline8 \
     libsqlite3-0 \
@@ -105,8 +109,15 @@ COPY --from=builder /usr/local/lib/python3.13 /usr/local/lib/python3.13
 COPY --from=builder /usr/local/lib/libpython3.13.so* /usr/local/lib/
 
 # Copy runtime dependencies for Python
+COPY --from=ha-deps /usr/bin/ffmpeg /usr/bin/ffmpeg
+COPY --from=ha-deps /usr/bin/ffprobe /usr/bin/ffprobe
+COPY --from=ha-deps /usr/bin/gcc /usr/bin/gcc
+COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-gcc* /usr/bin/
+COPY --from=ha-deps /usr/lib/gcc/aarch64-linux-gnu /usr/lib/gcc/aarch64-linux-gnu
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libffi.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libgcc_s.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libssl.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libstdc++.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libcrypto.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libbz2.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libreadline.so.* /usr/lib/${LIB_DIR}/
@@ -118,6 +129,14 @@ COPY --from=ha-deps /usr/lib/${LIB_DIR}/libxml2.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libxmlsec1.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/liblzma.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libz.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavcodec.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavdevice.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavfilter.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavformat.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavutil.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libpostproc.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libswresample.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libswscale.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /lib/${LIB_DIR}/libtinfo.so.* /lib/${LIB_DIR}/
 
 WORKDIR /config
