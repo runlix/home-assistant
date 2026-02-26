@@ -28,10 +28,14 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/root/.cache/pip,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
+    autoconf \
+    automake \
     curl \
     gcc \
     g++ \
+    libtool \
     make \
+    pkg-config \
     libffi-dev \
     libssl-dev \
     libbz2-dev \
@@ -60,10 +64,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
  && curl -L -f "${PACKAGE_URL}" -o homeassistant-source.tar.gz \
  && tar -xzf homeassistant-source.tar.gz \
  && cd core-* \
- && /app/venv/bin/uv pip install --python /app/venv/bin/python --no-build -r requirements.txt \
- && /app/venv/bin/uv pip install --python /app/venv/bin/python --no-build -r requirements_all.txt \
+ && /app/venv/bin/uv pip install --python /app/venv/bin/python -r requirements.txt \
+ && /app/venv/bin/uv pip install --python /app/venv/bin/python -r requirements_all.txt \
  && /app/venv/bin/pip install --no-cache-dir zlib-ng isal psycopg2 sqlalchemy_utils numpy \
- && /app/venv/bin/uv pip install --python /app/venv/bin/python --no-deps . \
+ && /app/venv/bin/pip install --no-cache-dir --no-deps . \
  && cd /app \
  && test -f /app/venv/bin/hass || (echo "ERROR: hass binary not found after installation" && exit 1) \
  && rm -rf homeassistant-source.tar.gz core-* \
@@ -145,9 +149,13 @@ COPY --from=ha-deps /usr/bin/g++ /usr/bin/g++
 COPY --from=ha-deps /usr/bin/ld /usr/bin/ld
 COPY --from=ha-deps /usr/bin/objdump /usr/bin/objdump
 COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-as /usr/bin/aarch64-linux-gnu-as
-COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-gcc* /usr/bin/
-COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-g++* /usr/bin/
-COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-ld* /usr/bin/
+COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc
+COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-gcc-12 /usr/bin/aarch64-linux-gnu-gcc-12
+COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++
+COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-g++-12 /usr/bin/aarch64-linux-gnu-g++-12
+COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-ld /usr/bin/aarch64-linux-gnu-ld
+COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-ld.bfd /usr/bin/aarch64-linux-gnu-ld.bfd
+COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-ld.gold /usr/bin/aarch64-linux-gnu-ld.gold
 COPY --from=ha-deps /usr/lib/gcc/aarch64-linux-gnu /usr/lib/gcc/aarch64-linux-gnu
 COPY --from=ha-deps /usr/include /usr/include
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/ /usr/lib/${LIB_DIR}/
