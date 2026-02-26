@@ -37,6 +37,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libbz2-dev \
     libreadline-dev \
     libsqlite3-dev \
+    libpq-dev \
     libncurses5-dev \
     libncursesw5-dev \
     xz-utils \
@@ -56,7 +57,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
  && rm -rf Python-3.13.2 Python-3.13.2.tar.xz \
  && /usr/local/bin/python3.13 -m venv /app/venv \
  && /app/venv/bin/pip install --upgrade pip setuptools wheel \
- && /app/venv/bin/pip install --no-cache-dir zlib-ng isal \
+ && /app/venv/bin/pip install --no-cache-dir zlib-ng isal psycopg2 sqlalchemy_utils \
  && curl -L -f "${PACKAGE_URL}" -o homeassistant-source.tar.gz \
  && tar -xzf homeassistant-source.tar.gz \
  && cd core-* \
@@ -97,6 +98,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libreadline8 \
     libpcap0.8 \
     libsqlite3-0 \
+    libpq5 \
     libncurses6 \
     libncursesw6 \
     libtk8.6 \
