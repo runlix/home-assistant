@@ -56,12 +56,14 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
  && cd /app \
  && rm -rf Python-3.13.2 Python-3.13.2.tar.xz \
  && /usr/local/bin/python3.13 -m venv /app/venv \
- && /app/venv/bin/pip install --upgrade pip setuptools wheel \
- && /app/venv/bin/pip install --no-cache-dir zlib-ng isal psycopg2 sqlalchemy_utils numpy \
+ && /app/venv/bin/pip install --upgrade pip setuptools wheel uv \
  && curl -L -f "${PACKAGE_URL}" -o homeassistant-source.tar.gz \
  && tar -xzf homeassistant-source.tar.gz \
  && cd core-* \
- && /app/venv/bin/pip install --no-cache-dir . \
+ && /app/venv/bin/uv pip install --python /app/venv/bin/python --no-build -r requirements.txt \
+ && /app/venv/bin/uv pip install --python /app/venv/bin/python --no-build -r requirements_all.txt \
+ && /app/venv/bin/pip install --no-cache-dir zlib-ng isal psycopg2 sqlalchemy_utils numpy \
+ && /app/venv/bin/uv pip install --python /app/venv/bin/python --no-deps . \
  && cd /app \
  && test -f /app/venv/bin/hass || (echo "ERROR: hass binary not found after installation" && exit 1) \
  && rm -rf homeassistant-source.tar.gz core-* \
