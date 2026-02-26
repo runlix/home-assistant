@@ -57,7 +57,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
  && rm -rf Python-3.13.2 Python-3.13.2.tar.xz \
  && /usr/local/bin/python3.13 -m venv /app/venv \
  && /app/venv/bin/pip install --upgrade pip setuptools wheel \
- && /app/venv/bin/pip install --no-cache-dir zlib-ng isal psycopg2 sqlalchemy_utils \
+ && /app/venv/bin/pip install --no-cache-dir zlib-ng isal psycopg2 sqlalchemy_utils numpy \
  && curl -L -f "${PACKAGE_URL}" -o homeassistant-source.tar.gz \
  && tar -xzf homeassistant-source.tar.gz \
  && cd core-* \
