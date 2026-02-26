@@ -113,6 +113,7 @@ COPY --from=builder /usr/local/bin/python3 /usr/local/bin/python3
 
 # Copy Python 3.13 standard library
 COPY --from=builder /usr/local/lib/python3.13 /usr/local/lib/python3.13
+COPY --from=builder /usr/local/include/python3.13 /usr/local/include/python3.13
 
 # Copy Python 3.13 shared library and symlinks
 COPY --from=builder /usr/local/lib/libpython3.13.so* /usr/local/lib/
@@ -128,6 +129,7 @@ COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-gcc* /usr/bin/
 COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-g++* /usr/bin/
 COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-ld* /usr/bin/
 COPY --from=ha-deps /usr/lib/gcc/aarch64-linux-gnu /usr/lib/gcc/aarch64-linux-gnu
+COPY --from=ha-deps /usr/include /usr/include
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libffi.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libgcc_s.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libgmp.so.* /usr/lib/${LIB_DIR}/
