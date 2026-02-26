@@ -70,12 +70,21 @@ FROM ${BUILDER_IMAGE}:${BUILDER_TAG}@${BUILDER_DIGEST} AS ha-deps
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
+    binutils \
+    build-essential \
     ffmpeg \
     gcc \
+    g++ \
+    libc6-dev \
     libffi8 \
     libgcc-s1 \
+    libgmp10 \
+    libisl23 \
+    libmpc3 \
+    libmpfr6 \
     libssl3 \
     libstdc++6 \
+    libturbojpeg0 \
     libbz2-1.0 \
     libreadline8 \
     libsqlite3-0 \
@@ -111,13 +120,23 @@ COPY --from=builder /usr/local/lib/libpython3.13.so* /usr/local/lib/
 # Copy runtime dependencies for Python
 COPY --from=ha-deps /usr/bin/ffmpeg /usr/bin/ffmpeg
 COPY --from=ha-deps /usr/bin/ffprobe /usr/bin/ffprobe
+COPY --from=ha-deps /usr/bin/c++ /usr/bin/c++
 COPY --from=ha-deps /usr/bin/gcc /usr/bin/gcc
+COPY --from=ha-deps /usr/bin/g++ /usr/bin/g++
+COPY --from=ha-deps /usr/bin/x86_64-linux-gnu-as /usr/bin/x86_64-linux-gnu-as
 COPY --from=ha-deps /usr/bin/x86_64-linux-gnu-gcc* /usr/bin/
+COPY --from=ha-deps /usr/bin/x86_64-linux-gnu-g++* /usr/bin/
+COPY --from=ha-deps /usr/bin/x86_64-linux-gnu-ld* /usr/bin/
 COPY --from=ha-deps /usr/lib/gcc/x86_64-linux-gnu /usr/lib/gcc/x86_64-linux-gnu
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libffi.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libgcc_s.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libgmp.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libisl.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libmpc.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libmpfr.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libssl.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libstdc++.so.* /usr/lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/libturbojpeg.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libcrypto.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libbz2.so.* /usr/lib/${LIB_DIR}/
 COPY --from=ha-deps /usr/lib/${LIB_DIR}/libreadline.so.* /usr/lib/${LIB_DIR}/

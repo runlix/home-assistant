@@ -109,6 +109,14 @@ if [ "${FATAL_COUNT}" -gt 0 ]; then
   exit 1
 fi
 
+# Fail fast if runtime dependency installs fail during startup.
+PKG_FAIL_COUNT=$(echo "$LOGS" | grep -ciE "Unable to install package|Requirements .* not found" || true)
+if [ "${PKG_FAIL_COUNT}" -gt 0 ]; then
+  echo -e "${RED}❌ Found ${PKG_FAIL_COUNT} package/runtime requirement error(s) in logs:${NC}"
+  echo "$LOGS" | grep -iE "Unable to install package|Requirements .* not found" | head -10
+  exit 1
+fi
+
 # Check for expected startup messages
 if grep -qi "home assistant" <<< "$LOGS" 2>/dev/null; then
   echo -e "${GREEN}✅ Home Assistant startup message found${NC}"
@@ -170,6 +178,37 @@ if curl -fsSL --max-time 5 "${ROOT_URL}" -o /dev/null 2>/dev/null; then
   echo -e "${GREEN}✅ Web UI accessible (${ROOT_URL})${NC}"
 else
   echo -e "${YELLOW}⚠️  Web UI check failed (non-critical)${NC}"
+fi
+echo ""
+
+# Verify required runtime tooling exists in the container.
+echo -e "${BLUE}🛠️  Verifying runtime tooling...${NC}"
+if docker exec "${CONTAINER_NAME}" /usr/bin/ffmpeg -version >/dev/null 2>&1; then
+  echo -e "${GREEN}✅ ffmpeg available${NC}"
+else
+  echo -e "${RED}❌ ffmpeg missing${NC}"
+  exit 1
+fi
+
+if docker exec "${CONTAINER_NAME}" /usr/bin/ffprobe -version >/dev/null 2>&1; then
+  echo -e "${GREEN}✅ ffprobe available${NC}"
+else
+  echo -e "${RED}❌ ffprobe missing${NC}"
+  exit 1
+fi
+
+if docker exec "${CONTAINER_NAME}" /usr/bin/gcc --version >/dev/null 2>&1; then
+  echo -e "${GREEN}✅ gcc available${NC}"
+else
+  echo -e "${RED}❌ gcc missing${NC}"
+  exit 1
+fi
+
+if docker exec "${CONTAINER_NAME}" /usr/bin/g++ --version >/dev/null 2>&1; then
+  echo -e "${GREEN}✅ g++ available${NC}"
+else
+  echo -e "${RED}❌ g++ missing${NC}"
+  exit 1
 fi
 echo ""
 
