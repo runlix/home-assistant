@@ -105,7 +105,7 @@ FROM ${BASE_IMAGE}:${BASE_TAG}@${BASE_DIGEST}
 ARG LIB_DIR=aarch64-linux-gnu
 
 # Copy Python virtual environment from builder
-COPY --from=builder /app/venv /app/venv
+COPY --from=builder --chown=65532:65532 /app/venv /app/venv
 
 # Copy Python 3.13 binaries from builder (must match venv creation path)
 COPY --from=builder /usr/local/bin/python3.13 /usr/local/bin/python3.13
@@ -116,7 +116,8 @@ COPY --from=builder /usr/local/lib/python3.13 /usr/local/lib/python3.13
 COPY --from=builder /usr/local/include/python3.13 /usr/local/include/python3.13
 
 # Copy Python 3.13 shared library and symlinks
-COPY --from=builder /usr/local/lib/libpython3.13.so* /usr/local/lib/
+COPY --from=builder /usr/local/lib/libpython3.13.so /usr/local/lib/libpython3.13.so
+COPY --from=builder /usr/local/lib/libpython3.13.so.1.0 /usr/local/lib/libpython3.13.so.1.0
 
 # Copy runtime dependencies for Python
 COPY --from=ha-deps /usr/bin/ffmpeg /usr/bin/ffmpeg
@@ -132,35 +133,7 @@ COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-g++* /usr/bin/
 COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-ld* /usr/bin/
 COPY --from=ha-deps /usr/lib/gcc/aarch64-linux-gnu /usr/lib/gcc/aarch64-linux-gnu
 COPY --from=ha-deps /usr/include /usr/include
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libffi.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libgcc_s.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libgmp.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libisl.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libmpc.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libmpfr.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libssl.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libstdc++.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libturbojpeg.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libcrypto.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libbz2.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libreadline.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libsqlite3.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libncurses.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libncursesw.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libtk8.6.so /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libxml2.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libxmlsec1.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/liblzma.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libz.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavcodec.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavdevice.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavfilter.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavformat.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libavutil.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libpostproc.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libswresample.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /usr/lib/${LIB_DIR}/libswscale.so.* /usr/lib/${LIB_DIR}/
-COPY --from=ha-deps /lib/${LIB_DIR}/libtinfo.so.* /lib/${LIB_DIR}/
+COPY --from=ha-deps /usr/lib/${LIB_DIR}/ /usr/lib/${LIB_DIR}/
 
 WORKDIR /config
 USER 65532:65532
