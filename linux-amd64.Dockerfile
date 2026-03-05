@@ -1,4 +1,4 @@
-# Builder image and tag from VERSION.json builder.image and builder.tag
+# Builder image and tag from VERSION.json builder.image and builder.tag 
 ARG BUILDER_IMAGE=docker.io/library/debian
 ARG BUILDER_TAG=bookworm-slim
 # Base image and tag from VERSION.json base.image and base.tag
