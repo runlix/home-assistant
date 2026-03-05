@@ -66,7 +66,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
  && cd core-* \
  && /app/venv/bin/uv pip install --python /app/venv/bin/python -r requirements.txt \
  && /app/venv/bin/uv pip install --python /app/venv/bin/python -r requirements_all.txt \
- && /app/venv/bin/pip install --no-cache-dir zlib-ng isal psycopg2 sqlalchemy_utils numpy \
+ && /app/venv/bin/pip install --no-cache-dir zlib-ng isal psycopg2 sqlalchemy_utils numpy prettytable==3.12.0 \
  && /app/venv/bin/pip install --no-cache-dir --no-deps . \
  && cd /app \
  && test -f /app/venv/bin/hass || (echo "ERROR: hass binary not found after installation" && exit 1) \
