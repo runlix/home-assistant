@@ -18,7 +18,7 @@
         "BUILDER_DIGEST": "sha256:8af0e5095f9964007f5ebd11191dfe52dcb51bf3afa2c07f055fc5451b78ba0e",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
-        "BASE_DIGEST": "sha256:4fbf76e209686ae07adfc04f4ae93e7d0399e7b29dd105977494bd8913f7c7c8",
+        "BASE_DIGEST": "sha256:c96cdb2bf918abd310a5367f7a8216a89b1ad8f1d67e526e8b71c542bdcddf55",
         "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.2.3.tar.gz"
       },
       "test_script": ".ci/smoke-test.sh"
@@ -39,7 +39,7 @@
         "BUILDER_DIGEST": "sha256:ee5473f786ff8a4e03409277c276b459b29afa55a84268bef55342c4f705b7ad",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "stable",
-        "BASE_DIGEST": "sha256:c581f1316adbfdf7a3b168d233abe8288c16ca3cd46b5aa2fc7b2d6cc8e61cb8",
+        "BASE_DIGEST": "sha256:09b0c05362b1137357d2e9f641eb153f969f5ae89b59faf127f93ce20dfcf4cb",
         "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.2.3.tar.gz"
       },
       "test_script": ".ci/smoke-test.sh"
@@ -60,7 +60,7 @@
         "BUILDER_DIGEST": "sha256:8af0e5095f9964007f5ebd11191dfe52dcb51bf3afa2c07f055fc5451b78ba0e",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
-        "BASE_DIGEST": "sha256:92ecb72e64a2f40022bbf7d01df9100080121e7cb791e3570c1390c78ef0e420",
+        "BASE_DIGEST": "sha256:66b3bb98b225b270091eec45d7e26dabfa24bad52995e0b01807c24cfbffe675",
         "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.2.3.tar.gz"
       },
       "test_script": ".ci/smoke-test.sh"
@@ -81,7 +81,7 @@
         "BUILDER_DIGEST": "sha256:ee5473f786ff8a4e03409277c276b459b29afa55a84268bef55342c4f705b7ad",
         "BASE_IMAGE": "ghcr.io/runlix/distroless-runtime",
         "BASE_TAG": "debug",
-        "BASE_DIGEST": "sha256:220f2faee3c9e9aa25c8f2ab5a994abd97bba156816ef0be81d282f479d4cc95",
+        "BASE_DIGEST": "sha256:a6c827114563a90f8084a00940569796421819c3775f79c69e2fc61ba66c77f9",
         "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.2.3.tar.gz"
       },
       "test_script": ".ci/smoke-test.sh"
