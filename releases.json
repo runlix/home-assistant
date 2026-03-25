@@ -1,9 +1,9 @@
 {
   "home-assistant": {
     "version": "2026.2.3",
-    "sha": "353277e247f5f66e95e49d8c70c61b0428039f32",
-    "short_sha": "353277e",
-    "timestamp": "2026-03-24T05:26:10Z",
+    "sha": "3b71c91995f2c4c90c57c474e4bfcab22aab1d17",
+    "short_sha": "3b71c91",
+    "timestamp": "2026-03-25T04:54:26Z",
     "manifests": [
       "2026.2.3-debug",
       "2026.2.3-stable"
