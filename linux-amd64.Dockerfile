@@ -36,15 +36,15 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
       tk-dev \
       xz-utils \
       zlib1g-dev \
- && curl -O https://www.python.org/ftp/python/3.14.1/Python-3.14.1.tar.xz \
- && tar -xf Python-3.14.1.tar.xz \
- && cd Python-3.14.1 \
+ && curl -O https://www.python.org/ftp/python/3.14.2/Python-3.14.2.tar.xz \
+ && tar -xf Python-3.14.2.tar.xz \
+ && cd Python-3.14.2 \
  && ./configure --enable-optimizations --enable-shared --prefix=/usr/local \
  && make -j"$(nproc)" \
  && make install \
  && ldconfig \
  && cd /app \
- && rm -rf Python-3.14.1 Python-3.14.1.tar.xz \
+ && rm -rf Python-3.14.2 Python-3.14.2.tar.xz \
  && /usr/local/bin/python3.14 -m venv /app/venv \
  && /app/venv/bin/pip install --upgrade pip setuptools wheel uv \
  && curl -L -f "${PACKAGE_URL}" -o homeassistant-source.tar.gz \
