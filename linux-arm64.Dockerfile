@@ -36,16 +36,16 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
       tk-dev \
       xz-utils \
       zlib1g-dev \
- && curl -O https://www.python.org/ftp/python/3.13.2/Python-3.13.2.tar.xz \
- && tar -xf Python-3.13.2.tar.xz \
- && cd Python-3.13.2 \
+ && curl -O https://www.python.org/ftp/python/3.14.1/Python-3.14.1.tar.xz \
+ && tar -xf Python-3.14.1.tar.xz \
+ && cd Python-3.14.1 \
  && ./configure --enable-optimizations --enable-shared --prefix=/usr/local \
  && make -j"$(nproc)" \
  && make install \
  && ldconfig \
  && cd /app \
- && rm -rf Python-3.13.2 Python-3.13.2.tar.xz \
- && /usr/local/bin/python3.13 -m venv /app/venv \
+ && rm -rf Python-3.14.1 Python-3.14.1.tar.xz \
+ && /usr/local/bin/python3.14 -m venv /app/venv \
  && /app/venv/bin/pip install --upgrade pip setuptools wheel uv \
  && curl -L -f "${PACKAGE_URL}" -o homeassistant-source.tar.gz \
  && tar -xzf homeassistant-source.tar.gz \
@@ -107,11 +107,11 @@ ARG LIB_DIR="aarch64-linux-gnu"
 
 COPY --from=builder --chown=65532:65532 /app/venv /app/venv
 COPY --from=builder /usr/local/bin/python3 /usr/local/bin/python3
-COPY --from=builder /usr/local/bin/python3.13 /usr/local/bin/python3.13
-COPY --from=builder /usr/local/include/python3.13 /usr/local/include/python3.13
-COPY --from=builder /usr/local/lib/python3.13 /usr/local/lib/python3.13
-COPY --from=builder /usr/local/lib/libpython3.13.so /usr/local/lib/libpython3.13.so
-COPY --from=builder /usr/local/lib/libpython3.13.so.1.0 /usr/local/lib/libpython3.13.so.1.0
+COPY --from=builder /usr/local/bin/python3.14 /usr/local/bin/python3.14
+COPY --from=builder /usr/local/include/python3.14 /usr/local/include/python3.14
+COPY --from=builder /usr/local/lib/python3.14 /usr/local/lib/python3.14
+COPY --from=builder /usr/local/lib/libpython3.14.so /usr/local/lib/libpython3.14.so
+COPY --from=builder /usr/local/lib/libpython3.14.so.1.0 /usr/local/lib/libpython3.14.so.1.0
 
 COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-as /usr/bin/aarch64-linux-gnu-as
 COPY --from=ha-deps /usr/bin/aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++
