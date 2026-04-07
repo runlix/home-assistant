@@ -72,7 +72,7 @@
         "/^\\.ci\\/build\\.json$/"
       ],
       "matchStrings": [
-        "\"PACKAGE_URL\"\\s*:\\s*\"https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/v?(?<currentValue>[^/]+)/[^\"]+\""
+        "\"PACKAGE_URL\"\\s*:\\s*\"https://github\\.com/(?<depName>[^/]+/[^/]+)/archive/refs/tags/v?(?<currentValue>[^\"]+)\\.tar\\.gz\""
       ],
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v?(?<version>.*)$"
