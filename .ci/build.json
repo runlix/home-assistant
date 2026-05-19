@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/runlix/build-workflow/c5acba22d15a58c37df6da817cafba993ad38132/schema/build-config.schema.json",
   "image": "ghcr.io/runlix/home-assistant",
-  "version": "2026.5.2",
+  "version": "2026.5.3",
   "defaults": {
     "test": ".ci/smoke-test.sh"
   },
@@ -14,7 +14,7 @@
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:111187cf8b6644f9779a9b654dce1d33bc194a1a8f5434b583d1c036420a28fa",
         "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:2749ca60ffb3c42de053229d7967d292d7dad1067936b38995da0bbfb96c4c23",
-        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.5.2.tar.gz"
+        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.5.3.tar.gz"
       }
     },
     {
@@ -25,7 +25,7 @@
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:111187cf8b6644f9779a9b654dce1d33bc194a1a8f5434b583d1c036420a28fa",
         "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:818bdcdbfc5364abea04a4f3038db34a0fdc26a164ac95f54eb626b32bc4dda4",
-        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.5.2.tar.gz"
+        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.5.3.tar.gz"
       }
     },
     {
@@ -36,7 +36,7 @@
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:debug@sha256:094fac5a89e8534908389fb61987a9a240a013c3aef505016218fc4366a3626a",
         "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:2749ca60ffb3c42de053229d7967d292d7dad1067936b38995da0bbfb96c4c23",
-        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.5.2.tar.gz"
+        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.5.3.tar.gz"
       }
     },
     {
@@ -47,7 +47,7 @@
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:debug@sha256:094fac5a89e8534908389fb61987a9a240a013c3aef505016218fc4366a3626a",
         "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:818bdcdbfc5364abea04a4f3038db34a0fdc26a164ac95f54eb626b32bc4dda4",
-        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.5.2.tar.gz"
+        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.5.3.tar.gz"
       }
     }
   ]
