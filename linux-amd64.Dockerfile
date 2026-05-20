@@ -1,5 +1,5 @@
 ARG BUILDER_REF="docker.io/library/debian:bookworm-slim@sha256:b29f74a267526ae6ea104eed6c46133b0ca70ce812525df8cd5817698f0a624a"
-ARG BASE_REF="ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:111187cf8b6644f9779a9b654dce1d33bc194a1a8f5434b583d1c036420a28fa"
+ARG BASE_REF="ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:7b02520205fe4ba31191c32dfff3ff38cba0990b6f1f6c95e189d58b82522240"
 ARG PACKAGE_URL="https://github.com/home-assistant/core/archive/refs/tags/2026.4.0.tar.gz"
 ARG GO2RTC_VERSION="1.9.14"
 
