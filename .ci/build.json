@@ -13,7 +13,7 @@
       "dockerfile": "linux-amd64.Dockerfile",
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:c617ac0b574bda06a32fef9e2d441124e58162da6731e25a1a60c22d5f526131",
-        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:f3034a6ec3c1205360777c4aae76234998866ad18806ae62b63a3f84ccad782b",
+        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:a4672c0cb26fbdde88e38fa2dfb6c681942306680e41e4378b28770b6e79ee91",
         "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.9.4.tar.gz"
       }
     },
@@ -24,7 +24,7 @@
       "dockerfile": "linux-arm64.Dockerfile",
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:c617ac0b574bda06a32fef9e2d441124e58162da6731e25a1a60c22d5f526131",
-        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:0c8bbb8e987a035fe1d9704eb2e571b7e9a836e1caa46345290674b45b69e417",
+        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:a1b86db52ce3daef089e45aabe36dfec4091f82464c25c1fdcf03de197cbe82a",
         "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.9.4.tar.gz"
       }
     },
@@ -35,7 +35,7 @@
       "dockerfile": "linux-amd64.Dockerfile",
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:debug@sha256:6cc2fd5ad869c560d21898fe0d028c9da57d046bcf04ec613dd0ea86e6d7066a",
-        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:f3034a6ec3c1205360777c4aae76234998866ad18806ae62b63a3f84ccad782b",
+        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:a4672c0cb26fbdde88e38fa2dfb6c681942306680e41e4378b28770b6e79ee91",
         "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.9.4.tar.gz"
       }
     },
@@ -46,7 +46,7 @@
       "dockerfile": "linux-arm64.Dockerfile",
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:debug@sha256:6cc2fd5ad869c560d21898fe0d028c9da57d046bcf04ec613dd0ea86e6d7066a",
-        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:0c8bbb8e987a035fe1d9704eb2e571b7e9a836e1caa46345290674b45b69e417",
+        "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:a1b86db52ce3daef089e45aabe36dfec4091f82464c25c1fdcf03de197cbe82a",
         "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.9.4.tar.gz"
       }
     }
