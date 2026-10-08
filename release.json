@@ -1,13 +1,13 @@
 {
   "image": "ghcr.io/runlix/home-assistant",
-  "version": "2026.9.4",
-  "sha": "bac03fe4a0f730c87e2049899b1c69614992c6d2",
-  "short_sha": "bac03fe",
-  "published_at": "2026-10-07T01:26:13Z",
+  "version": "2026.10.0",
+  "sha": "851b10881f72e45306d7a993c71ef2120fd23e2d",
+  "short_sha": "851b108",
+  "published_at": "2026-10-08T02:23:49Z",
   "manifests": [
     {
       "tag": "2026.4.0-debug",
-      "digest": "sha256:db6941520945bc362f3dcd6b9416d145faa9cb03e6be8674afd417982e365752",
+      "digest": "sha256:0d0dd40c0186f64d8a729a19775ecf346b056e33db3784a77e1d608f88ed6719",
       "platforms": [
         "linux/amd64",
         "linux/arm64"
@@ -15,7 +15,7 @@
     },
     {
       "tag": "2026.4.0-stable",
-      "digest": "sha256:ee6f6bc16e61091b619778f4bbac2a09b9ec7fa3f313223c4b3e35831c5700c9",
+      "digest": "sha256:db31a2fd447559b748104c4dcc526dc1adfcf72e74574db81c27cc1ced18c2a0",
       "platforms": [
         "linux/amd64",
         "linux/arm64"
