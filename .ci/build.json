@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/runlix/build-workflow/c5acba22d15a58c37df6da817cafba993ad38132/schema/build-config.schema.json",
   "image": "ghcr.io/runlix/home-assistant",
-  "version": "2026.11.0",
+  "version": "2026.11.1",
   "defaults": {
     "test": ".ci/smoke-test.sh"
   },
@@ -14,7 +14,7 @@
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:2cf9e2425b6bf7ae5c79cbf6606cde5743286875b6d351ace0a64da17dbd0b07",
         "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:c67e92c8099ba22853ab4cfda7cfb494d253d6012ca82dee98ba8976772af018",
-        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.11.0.tar.gz"
+        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.11.1.tar.gz"
       }
     },
     {
@@ -25,7 +25,7 @@
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:stable@sha256:2cf9e2425b6bf7ae5c79cbf6606cde5743286875b6d351ace0a64da17dbd0b07",
         "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:ec8534cda2cb30f29f44f23e135297af7a1496f2990fd8e4e84aa36b081a757a",
-        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.11.0.tar.gz"
+        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.11.1.tar.gz"
       }
     },
     {
@@ -36,7 +36,7 @@
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:debug@sha256:85142ec8c3c3685a574f3967626718621f54be971a5f38e750922641209e802d",
         "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:c67e92c8099ba22853ab4cfda7cfb494d253d6012ca82dee98ba8976772af018",
-        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.11.0.tar.gz"
+        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.11.1.tar.gz"
       }
     },
     {
@@ -47,7 +47,7 @@
       "build_args": {
         "BASE_REF": "ghcr.io/runlix/distroless-runtime-v2-canary:debug@sha256:85142ec8c3c3685a574f3967626718621f54be971a5f38e750922641209e802d",
         "BUILDER_REF": "docker.io/library/debian:bookworm-slim@sha256:ec8534cda2cb30f29f44f23e135297af7a1496f2990fd8e4e84aa36b081a757a",
-        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.11.0.tar.gz"
+        "PACKAGE_URL": "https://github.com/home-assistant/core/archive/refs/tags/2026.11.1.tar.gz"
       }
     }
   ]
